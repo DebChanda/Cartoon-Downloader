@@ -42,7 +42,7 @@ def video_finder(url, video_save_name, site):
         video_name = driver.find_element_by_tag_name(site_data[site][0]).text
         iframes = driver.find_elements_by_tag_name(site_data[site][1])
         driver.switch_to.frame(iframes[site_data[site][2]])
-        video_url = driver.find_elements_by_tag_name(site_data[site][3])[0].get_attribute(site_data[site][4])
+        video_url = driver.find_element_by_tag_name(site_data[site][3]).get_attribute(site_data[site][4])
         driver.quit()
         
         with open(name, "w") as f:
@@ -168,27 +168,30 @@ while loop:
 			if ( check == 'y' or check == 'yes' or check == 'Y' or check == 'Yes' or check == 'YES'):
 
 				list_dl = []
+				video_save_name = []
+
 				for i in range(len(url_list)):
 					list_dl.append(i)
 
 				for no in list_dl:
-					video_save_name = onefunc(url_list[no],site,no+1,len(url_list))
+					video_save_name.append(onefunc(url_list[no],site,no+1,len(url_list)))
 
 				for no in list_dl:
-					download_video(video_save_name, no+1, len(url_list))
+					download_video(video_save_name[no], no+1, len(url_list))
 
 				loop = False
 
 			elif ( check == 'N' or check == 'no' or check == 'n' or check == 'No' or check == 'NO'):
 
 				list_dl = download_numbers()
+				video_save_name = []
 
 				for no in range(len(list_dl)):
-					video_save_name = onefunc(url_list[list_dl[no]],site,no+1,len(list_dl))
+					video_save_name.append(onefunc(url_list[list_dl[no]],site,no+1,len(list_dl)))
 
 				for no in range(len(list_dl)):
-					download_video(video_save_name, no+1, len(list_dl))
-					pass
+					download_video(video_save_name[no], no+1, len(list_dl))
+					
 
 				loop = False
 				
