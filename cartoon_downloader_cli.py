@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 import requests, os, time
 from selenium import webdriver as wd
 from selenium.webdriver.firefox.options import Options
