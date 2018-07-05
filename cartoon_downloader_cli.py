@@ -9,7 +9,6 @@ from progress import bar as Bars
 site_data = {}
 site_data["watchcartoononline"] = ["h1","iframe",2,"source","src","sonra"]
 
-
 def site_determiner(url):
 	url_dummy = url.split(".")[1]
 	print("Link of", url_dummy, "found! ") 
@@ -18,6 +17,7 @@ def site_determiner(url):
 
 
 def list_finder(playlist_url,site):
+
     url_list = []
     response = requests.get(playlist_url)
     soup = bs(response.content, "lxml")
@@ -28,8 +28,6 @@ def list_finder(playlist_url,site):
 
     url_list = url_list[::-1]
     return url_list
-
-
 
 
 def video_finder(url, video_save_name, site):
@@ -51,7 +49,6 @@ def video_finder(url, video_save_name, site):
             f.write(video_name + ',' + video_url)
             f.close()
 
-
     except Exception as e:
     	print(e)
     	driver.quit()
@@ -71,9 +68,8 @@ def onefunc(url, site, no, total):
  	return video_save_name
 
 
-
-
 def download_video(video_save_name, no, total):
+
 	with open(os.path.join(main_path, "video",video_save_name), "r") as f:
 
 		video_data = f.read().split(",")
@@ -99,7 +95,6 @@ def download_video(video_save_name, no, total):
 	bar.suffix = "100.00%% " + obj.get_speed(human = True) + " " + str(obj.get_dl_size(human = True))
 	bar.next(100)
 	bar.finish()
-
        
 
 def download_numbers(go=1):
@@ -139,7 +134,7 @@ def download_numbers(go=1):
 os.system("clear")
 main_path = os.path.dirname(__file__)
 folder_to_create = ["video","download"]
-program_name = "Cartoon Downloader CLI 2.0"
+program_name = "Cartoon Downloader CLI 2.1"
 
 print("Welcome to " + program_name)
 k = input("Press ENTER to continue !")
@@ -152,10 +147,7 @@ for folder in folder_to_create:
     else:
     	print("Folder " + folder + " found!")
 
-
-
 loop = True
-
 while loop:
 
 	mode = str(input("Do you want to download from a playlist? (yes/no) "))
@@ -183,10 +175,8 @@ while loop:
 					video_save_name = onefunc(url_list[no],site,no+1,len(url_list))
 
 				for no in list_dl:
-					#huh
-					pass
+					download_video(video_save_name, no+1, len(url_list))
 
-				
 				loop = False
 
 			elif ( check == 'N' or check == 'no' or check == 'n' or check == 'No' or check == 'NO'):
@@ -203,7 +193,7 @@ while loop:
 				loop = False
 				
 			else:
-				print("Wrong input !")
+				print("Wrong Choice !")
 
 
 	elif ( mode == 'N' or mode == 'no' or mode == 'n' or mode == 'No' or mode == 'NO'):
@@ -215,4 +205,4 @@ while loop:
 		download_video(video_save_name, 1, 1)
 
 	else:
-			print("Wrong input !!")
+			print("Wrong Choice !")
