@@ -67,7 +67,7 @@ def download_video(video_save_name, no, total):
 		bar.suffix = "%.2f" %p + "%% " + obj.get_speed(human = True) + " " + str(obj.get_dl_size(human = True))
 		time.sleep(0.5)
 	bar.suffix = "100.00%% " + obj.get_speed(human = True) + " " + str(obj.get_dl_size(human = True))
-	bar.next(100)
+	bar.update()
 	bar.finish()
        
 
@@ -108,7 +108,7 @@ def download_numbers(go=1):
 os.system("clear")
 main_path = os.path.dirname(__file__)
 folder_to_create = ["video","download"]
-program_name = "Cartoon Downloader CLI 3.0"
+program_name = "Cartoon Downloader CLI 3.1"
 
 print("Welcome to " + program_name)
 k = input("Press ENTER to continue !")
