@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-import requests, os, time
+import requests, os, time, sys
 from selenium import webdriver as wd
 from selenium.webdriver.firefox.options import Options
 from bs4 import BeautifulSoup as bs
@@ -10,6 +10,7 @@ from progress import bar as Bars
 
 site_data = {}
 site_data["watchcartoononline"] = ["h1","iframe",2,"source","src","sonra"]
+sys.path.insert(0, os.path.join(os.path.dirname(__file__),"sites"))
 
 def site_determiner(url):
 	url_dummy = url.split(".")[1]
@@ -17,7 +18,7 @@ def site_determiner(url):
 
 	return url_dummy
 
-
+"""
 def list_finder(playlist_url,site):
 
     url_list = []
@@ -55,19 +56,26 @@ def video_finder(url, video_save_name, site):
     	print(e)
     	driver.quit()
 
+"""
+def onefunc(url_list, site):
 
-def onefunc(url, site, no, total):
+	if site == "watchcartoononline":
+		import watchcartoononline as sitename
 
- 	video_save_name = url.split("/")[-1]
- 	print("[" + str(no) + "/" + str(total) + "] Finding Download Link ...")
 
- 	if os.path.isfile(os.path.join(main_path, "video",video_save_name)):
- 		print("[" + str(no) + "/" + str(total) + "] Download Link found locally!")
- 	else:
- 		video_finder(url, video_save_name, site)
- 		print("[" + str(no) + "/" + str(total) + "] Download Link found !")
+	return sitename.video_finder(url_list)
 
- 	return video_save_name
+def twofunc(playlist_url, site):
+
+	if site == "watchcartoononline":
+		import watchcartoononline as sitename
+	elif site == "gogoanime":
+		import gogoanime as sitename
+	else:
+		print("Unknown Site !")
+
+	url_list = sitename.list_finder(playlist_url)
+	return url_list
 
 
 def download_video(video_save_name, no, total):
@@ -136,7 +144,7 @@ def download_numbers(go=1):
 os.system("clear")
 main_path = os.path.dirname(__file__)
 folder_to_create = ["video","download"]
-program_name = "Cartoon Downloader CLI 2.1"
+program_name = "Cartoon Downloader CLI 3.0"
 
 print("Welcome to " + program_name)
 k = input("Press ENTER to continue !")
@@ -160,13 +168,12 @@ while loop:
 		playlist_url = str(input("Paste the url of the playlist :  "))
 		site = site_determiner(playlist_url)
 
-		url_list = list_finder(playlist_url,site)
+		url_list = twofunc(playlist_url,site)
 
 		loop = True 
 		while loop:
 			
 			check = input("Do you want to download all " + str(len(url_list)) + " videos ? (yes/no) ")
-
 			if ( check == 'y' or check == 'yes' or check == 'Y' or check == 'Yes' or check == 'YES'):
 
 				list_dl = []
@@ -175,24 +182,26 @@ while loop:
 				for i in range(len(url_list)):
 					list_dl.append(i)
 
-				for no in list_dl:
-					video_save_name.append(onefunc(url_list[no],site,no+1,len(url_list)))
+				video_save_name_list = onefunc(url_list,site)
 
 				for no in list_dl:
-					download_video(video_save_name[no], no+1, len(url_list))
+					download_video(video_save_name_list[no], no+1, len(url_list))
 
 				loop = False
 
 			elif ( check == 'N' or check == 'no' or check == 'n' or check == 'No' or check == 'NO'):
 
 				list_dl = download_numbers()
-				video_save_name = []
+				url_list_2 = []
+
+				for no in list_dl:
+					url_list_2.append(url_list[no])
+
+				video_save_name_list =  onefunc(url_list_2,site)
+
 
 				for no in range(len(list_dl)):
-					video_save_name.append(onefunc(url_list[list_dl[no]],site,no+1,len(list_dl)))
-
-				for no in range(len(list_dl)):
-					download_video(video_save_name[no], no+1, len(list_dl))
+					download_video(video_save_name_list[no], no+1, len(list_dl))
 					
 
 				loop = False
@@ -206,8 +215,11 @@ while loop:
 		print("Downloading a single file!")
 		url = str(input("Paste the url of the video :  "))
 		site = site_determiner(url)
-		video_save_name = onefunc(url, site, 1, 1)
-		download_video(video_save_name, 1, 1)
+		url_list = []
+		url_list.append(url)
+		video_save_name_list =  onefunc(url_list, site)
+		#print(video_save_name_list,"duplicate")
+		download_video(video_save_name_list[0], 1, 1)
 
 	else:
 			print("Wrong Choice !")
