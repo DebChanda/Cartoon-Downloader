@@ -27,6 +27,9 @@ def masterfunc(something, site, type):
 	elif site == "gogoanime":
 		import gogoanime as sitename
 
+	elif site == "kiss-anime":
+		import kiss_anime as sitename
+
 	else:
 		print("Unknown Site !")
 
