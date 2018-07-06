@@ -18,45 +18,6 @@ def site_determiner(url):
 
 	return url_dummy
 
-"""
-def list_finder(playlist_url,site):
-
-    url_list = []
-    response = requests.get(playlist_url)
-    soup = bs(response.content, "lxml")
-    div_list = soup.body.find_all("a", class_=site_data[site][5])
-    for item in div_list:
-        link = item["href"]
-        url_list.append(link)
-
-    url_list = url_list[::-1]
-    return url_list
-
-
-def video_finder(url, video_save_name, site):
-
-    options = Options()
-    options.set_headless(headless=True)
-    driver = wd.Firefox(firefox_options=options)
-    # driver = wd.Firefox()
-    name = os.path.join(main_path, "video", url.split("/")[-1])
-    try:
-        driver.get(url)
-        video_name = driver.find_element_by_tag_name(site_data[site][0]).text
-        iframes = driver.find_elements_by_tag_name(site_data[site][1])
-        driver.switch_to.frame(iframes[site_data[site][2]])
-        video_url = driver.find_element_by_tag_name(site_data[site][3]).get_attribute(site_data[site][4])
-        driver.quit()
-        
-        with open(name, "w") as f:
-            f.write(video_name + ',' + video_url)
-            f.close()
-
-    except Exception as e:
-    	print(e)
-    	driver.quit()
-
-"""
 def onefunc(url_list, site):
 
 	if site == "watchcartoononline":
