@@ -18,25 +18,28 @@ def site_determiner(url):
 
 	return url_dummy
 
-def onefunc(url_list, site):
+
+def masterfunc(something, site, type):
 
 	if site == "watchcartoononline":
 		import watchcartoononline as sitename
 
-
-	return sitename.video_finder(url_list)
-
-def twofunc(playlist_url, site):
-
-	if site == "watchcartoononline":
-		import watchcartoononline as sitename
 	elif site == "gogoanime":
 		import gogoanime as sitename
+
 	else:
 		print("Unknown Site !")
 
-	url_list = sitename.list_finder(playlist_url)
-	return url_list
+
+	if type == "list":
+		return sitename.list_finder(something)
+
+	elif type == "video":
+		return sitename.video_finder(something)
+
+	else:
+		print("Wrong Type !")
+
 
 
 def download_video(video_save_name, no, total):
@@ -129,7 +132,7 @@ while loop:
 		playlist_url = str(input("Paste the url of the playlist :  "))
 		site = site_determiner(playlist_url)
 
-		url_list = twofunc(playlist_url,site)
+		url_list = masterfunc(playlist_url, site, "list")
 
 		loop = True 
 		while loop:
@@ -143,7 +146,7 @@ while loop:
 				for i in range(len(url_list)):
 					list_dl.append(i)
 
-				video_save_name_list = onefunc(url_list,site)
+				video_save_name_list = masterfunc(url_list, site, "video")
 
 				for no in list_dl:
 					download_video(video_save_name_list[no], no+1, len(url_list))
@@ -158,7 +161,7 @@ while loop:
 				for no in list_dl:
 					url_list_2.append(url_list[no])
 
-				video_save_name_list =  onefunc(url_list_2,site)
+				video_save_name_list =  masterfunc(url_list_2,site,"video")
 
 
 				for no in range(len(list_dl)):
@@ -178,8 +181,7 @@ while loop:
 		site = site_determiner(url)
 		url_list = []
 		url_list.append(url)
-		video_save_name_list =  onefunc(url_list, site)
-		#print(video_save_name_list,"duplicate")
+		video_save_name_list =  masterfunc(url_list, site, "video")
 		download_video(video_save_name_list[0], 1, 1)
 
 	else:
