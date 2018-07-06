@@ -1,22 +1,55 @@
 #! /usr/bin/env python3
 
 import requests, os, time, sys
-from selenium import webdriver as wd
-from selenium.webdriver.firefox.options import Options
-from bs4 import BeautifulSoup as bs
 from pySmartDL import SmartDL
 from progress import bar as Bars
 
-
-site_data = {}
-site_data["watchcartoononline"] = ["h1","iframe",2,"source","src","sonra"]
 sys.path.insert(0, os.path.join(os.path.dirname(__file__),"sites"))
+
+class tc:
+    VIOLET = '\033[95m'
+    BLUE = '\033[94m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    RED = '\033[91m'
+
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    DIM = '\033[2m'
+    ITALICS = '\033[3m'
+    UNDERLINE = '\033[4m'
+    BLINK = '\033[5m'
+    INVERT = '\033[7m'
+    STRIKE = '\033[9m'
+
+    EVIOLET = '\033[0m\033[95m'
+    EBLUE = '\033[0m\033[94m'
+    EGREEN = '\033[0m\033[92m'
+    EYELLOW = '\033[0m\033[93m'
+    ERED = '\033[0m\033[91m'
+
+    EBOLD = '\033[0m\033[1m'
+    EDIM = '\033[0m\033[2m'
+    EITALICS = '\033[0m\033[3m'
+    EUNDERLINE = '\033[0m\033[4m'
+    EBLINK = '\033[0m\033[5m'
+    EINVERT = '\033[0m\033[7m'
+    ESTRIKE = '\033[0m\033[9m'
+
 
 def site_determiner(url):
 	url_dummy = url.split(".")[1]
-	print("Link of", url_dummy, "found! ") 
+	print(tc.ENDC + "\nLink of", tc.EBOLD + tc.YELLOW, url_dummy, tc.ENDC + "was given.\n") 
 
 	return url_dummy
+
+def url_validity(url):
+	print(tc.EYELLOW + "\nChecking URL..." + tc.ENDC)
+	r = requests.get(url)
+	if r.status_code == 404:
+		return False
+	else:
+		return True
 
 
 def masterfunc(something, site, type):
@@ -111,28 +144,35 @@ def download_numbers(go=1):
 os.system("clear")
 main_path = os.path.dirname(__file__)
 folder_to_create = ["video","download"]
-program_name = "Cartoon Downloader CLI 3.1"
+program_name = "Cartoon Downloader CLI 3.2"
 
-print("Welcome to " + program_name)
-k = input("Press ENTER to continue !")
+print(tc.YELLOW + "Welcome to " + tc.VIOLET + tc.BOLD + program_name + tc.ENDC)
+k = input("\nPress" + tc.BLINK + tc.BOLD + tc.YELLOW + " ENTER" + tc.ENDC + " to continue!\n")
 
 for folder in folder_to_create:
 
     if not os.path.exists(os.path.join(main_path, folder)):
         os.makedirs(os.path.join(main_path, folder))
-        print("Folder " + folder + " created!")
+        print(tc.EGREEN + "Folder " + tc.BOLD +  folder + tc.EGREEN + " created!" + tc.ENDC)
     else:
-    	print("Folder " + folder + " found!")
+    	print(tc.EYELLOW + "Folder " + tc.BOLD +  folder + tc.EYELLOW + " found!" + tc.ENDC)
 
 loop = True
 while loop:
 
-	mode = str(input("Do you want to download from a playlist? (yes/no) "))
+	mode = str(input(tc.BOLD + "\nDo you want to download from a playlist? " + tc.ERED +"(yes/no) " + tc.EBLUE))
 
 	if ( mode == 'y' or mode == 'yes' or mode == 'Y' or mode == 'Yes' or mode == 'YES'):
 		loop = False
-		print("You choose to download from a playlist!\n")
-		playlist_url = str(input("Paste the url of the playlist :  "))
+		print(tc.EGREEN + "\nYou choose to download from a" + tc.BOLD + " playlist" + tc.EGREEN + "!\n" + tc.ENDC)
+		playlist_url = str(input(tc.BOLD + "Paste the URL of the playlist :  " + tc.ENDC))
+
+		if url_validity(playlist_url):
+			print(tc.EGREEN + tc.BOLD + "URL valid!")
+		else:
+			print(tc.ERED + tc.BOLD + "URL not valid!")
+			quit()
+			
 		site = site_determiner(playlist_url)
 
 		url_list = masterfunc(playlist_url, site, "list")
@@ -174,13 +214,20 @@ while loop:
 				loop = False
 				
 			else:
-				print("Wrong Choice !")
+				print(tc.ERED + tc.BOLD + "\nWrong Choice!" + tc.ENDC)
 
 
 	elif ( mode == 'N' or mode == 'no' or mode == 'n' or mode == 'No' or mode == 'NO'):
 		loop = False
-		print("Downloading a single file!")
-		url = str(input("Paste the url of the video :  "))
+		print(tc.EGREEN + "\nYou choose to download a" + tc.BOLD + " single episode" + tc.EGREEN + "!\n" + tc.ENDC)
+		url = str(input(tc.BOLD + "Paste the URL of the video :  " + tc.ENDC))
+
+		if url_validity(url):
+			print(tc.EGREEN + tc.BOLD + "URL valid!")
+		else:
+			print(tc.ERED + tc.BOLD + "URL not valid!")
+			quit()
+
 		site = site_determiner(url)
 		url_list = []
 		url_list.append(url)
@@ -188,4 +235,4 @@ while loop:
 		download_video(video_save_name_list[0], 1, 1)
 
 	else:
-			print("Wrong Choice !")
+			print(tc.ERED + tc.BOLD + "\nWrong Choice!" + tc.ENDC)
