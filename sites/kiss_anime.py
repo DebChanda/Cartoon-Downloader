@@ -1,7 +1,7 @@
 from selenium import webdriver as wd
 from bs4 import BeautifulSoup as bs
 from selenium.webdriver.chrome.options import Options
-import requests, os
+import requests, os, lxml
 
 def list_finder(playlist_url):
 

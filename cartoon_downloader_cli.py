@@ -103,7 +103,7 @@ def download_video(video_save_name, no, total):
 		bar.suffix = "%.2f" %p + "%% " + obj.get_speed(human = True) + " " + str(obj.get_dl_size(human = True))
 		time.sleep(0.5)
 	bar.suffix = "100.00%% " + obj.get_speed(human = True) + " " + str(obj.get_dl_size(human = True))
-	bar.update()
+	bar.next(100)
 	bar.finish()
        
 
